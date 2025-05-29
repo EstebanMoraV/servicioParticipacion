@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grupo6.servicioParticipacion.model.EstadoParticipacion;
+import com.grupo6.servicioParticipacion.model.Evento;
 import com.grupo6.servicioParticipacion.model.Participacion;
+import com.grupo6.servicioParticipacion.model.Usuario;
 import com.grupo6.servicioParticipacion.service.ParticipacionService;
 
 @RestController
@@ -40,6 +43,37 @@ public class ParticipacionController {
         }
     }
 
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<Participacion>> getParticipacionesByUsuario(@PathVariable Integer usuarioId) {
+        List<Participacion> participaciones = participacionService.getParticipacionesByUsuario(new Usuario(usuarioId, null, null, null, null, null));
+        if (participaciones != null && !participaciones.isEmpty()) {
+            return ResponseEntity.ok(participaciones);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/evento/{eventoId}")
+    public ResponseEntity<List<Participacion>> getParticipacionesByEvento(@PathVariable Integer eventoId) {
+        List<Participacion> participaciones = participacionService.getParticipacionesByEvento(new Evento(eventoId, null, null, null, null, null, null, null));
+        if (participaciones != null && !participaciones.isEmpty()) {
+            return ResponseEntity.ok(participaciones);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @GetMapping("/estado/{idEstado}")
+    public ResponseEntity<List<Participacion>> getParticipacionesByEstado(@PathVariable Integer idEstado) {
+        List<Participacion> participaciones = participacionService.getParticipacionesByEstado(new EstadoParticipacion(idEstado, null));
+        if (participaciones != null && !participaciones.isEmpty()) {
+            return ResponseEntity.ok(participaciones);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 
     @PostMapping
     public ResponseEntity<Participacion> saveParticipacion(@RequestBody Participacion participacion) {
