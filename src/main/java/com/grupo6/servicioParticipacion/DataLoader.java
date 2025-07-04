@@ -40,7 +40,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Verificamos si ya existen participaciones
         if (participacionRepository.count() > 0) {
-            System.out.println("⚠️ Ya hay datos. No se insertan fakes.");
+            System.out.println("Ya hay datos. No se insertan fakes.");
             return;
         }
 
@@ -83,7 +83,7 @@ public class DataLoader implements CommandLineRunner {
             em.persist(p);
         }
 
-        System.out.println("✅ Datos de prueba insertados correctamente.");
+        System.out.println("Datos de prueba insertados correctamente.");
     }
 }
 
