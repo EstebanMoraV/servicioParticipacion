@@ -23,17 +23,22 @@ import com.grupo6.servicioParticipacion.Assemblers.ParticipacionModelAssembler;
 import com.grupo6.servicioParticipacion.model.Participacion;
 import com.grupo6.servicioParticipacion.service.ParticipacionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v2/participaciones")
+@Tag(name = "Participaciones V2", description = "API para gestionar participaciones - HATEOAS")
 public class ParticipacionControllerV2 {
 
         @Autowired
-        private ParticipacionService participacionService;
+        private ParticipacionService participacionService; // Servicio para manejar la lógica de negocio de Participaciones
 
         @Autowired
-        private ParticipacionModelAssembler participacionModelAssembler;
+        private ParticipacionModelAssembler participacionModelAssembler; // Ensambler para convertir Participacion a EntityModel
 
         @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+        @Operation(summary = "Obtener todas las participaciones", description = "Devuelve una lista de todas las participaciones con enlaces HATEOAS")
         public CollectionModel<EntityModel<Participacion>> getAllParticipaciones() {
                 List<Participacion> participaciones = participacionService.getAllParticipaciones();
                 List<EntityModel<Participacion>> participacionModels = participaciones.stream()
@@ -45,6 +50,7 @@ public class ParticipacionControllerV2 {
         }
 
         @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+        @Operation(summary = "Obtener una participación por ID", description = "Devuelve una participación específica por su ID con enlaces HATEOAS")
         public ResponseEntity<EntityModel<Participacion>> getParticipacionById(@PathVariable Integer id) {
                 Participacion participacion = participacionService.getParticipacionById(id);
                 if (participacion != null) {
@@ -55,6 +61,7 @@ public class ParticipacionControllerV2 {
         }
 
         @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
+        @Operation(summary = "Crear una nueva participación", description = "Crea una nueva participación y devuelve el recurso creado con enlaces HATEOAS")
         public ResponseEntity<EntityModel<Participacion>> createParticipacion(@RequestBody Participacion participacion) {
                 Participacion createdParticipacion = participacionService.saveParticipacion(participacion);
                 return ResponseEntity.created(
@@ -65,6 +72,7 @@ public class ParticipacionControllerV2 {
         }
 
         @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+        @Operation(summary = "Actualizar una participación", description = "Actualiza una participación existente y devuelve el recurso actualizado con enlaces HATEOAS")
         public ResponseEntity<EntityModel<Participacion>> updateParticipacion(@PathVariable Integer id, @RequestBody Participacion participacion) {
                 Participacion existingParticipacion = participacionService.getParticipacionById(id);
                 if (existingParticipacion == null) {
@@ -83,6 +91,7 @@ public class ParticipacionControllerV2 {
         }
 
         @DeleteMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+        @Operation(summary = "Eliminar una participación", description = "Elimina una participación existente por su ID")
         public ResponseEntity<Void> deleteParticipacion(@PathVariable Integer id) {
                 Participacion participacion = participacionService.getParticipacionById(id);
                 if (participacion != null) {
